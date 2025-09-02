@@ -1,0 +1,39 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "name": {
+      "type": "String"
+    },
+    "location": {
+      "type": "String"
+    },
+    "cluster_size": {
+      "type": "String"
+    },
+    "sku_name": {
+      "type": "String"
+    },
+    "sku_tier": {
+      "type": "String"
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "type": "Microsoft.DBforPostgreSQL/flexibleServers",
+      "apiVersion": "2025-01-01-preview",
+      "name": "[parameters('name')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "[parameters('sku_name')]",
+        "tier": "[parameters('sku_tier')]"
+      },
+      "properties": {
+        "cluster": {
+          "clusterSize": "[parameters('cluster_size')]"
+        }
+      }
+    }
+  ]
+}
