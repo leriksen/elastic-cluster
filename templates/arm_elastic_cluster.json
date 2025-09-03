@@ -3,19 +3,59 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "name": {
-      "type": "String"
+      "type": "string"
     },
     "location": {
-      "type": "String"
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
     },
     "cluster_size": {
-      "type": "String"
+      "type": "string"
     },
     "sku_name": {
-      "type": "String"
+      "type": "string"
     },
     "sku_tier": {
-      "type": "String"
+      "type": "string"
+    },
+    "availability_zone": {
+      "type": "string"
+    },
+    "administrator_login": {
+      "type": "string"
+    },
+    "administrator_login_password": {
+      "type":  "string"
+    },
+    "password_auth": {
+      "type":  "string"
+    },
+    "backup_retention_days": {
+      "type": "string"
+    },
+    "geo_redundant_backup":{
+      "type": "string"
+    },
+    "active_directory_auth": {
+      "type": "string"
+    },
+    "ha_mode": {
+      "type": "string"
+    },
+    "standby_availability_zone": {
+      "type": "string"
+    },
+    "storage_autogrow": {
+      "type": "string"
+    },
+    "storage_size_gb": {
+      "type": "string"
+    },
+    "network": {
+      "type": "object",
+      "defaultValue": {}
     }
   },
   "variables": {},
@@ -30,9 +70,29 @@
         "tier": "[parameters('sku_tier')]"
       },
       "properties": {
+        "createMode":                 "Default",
+        "version":                    "[parameters('version')]",
+        "administratorLogin":         "[parameters('administrator_login')]",
+        "administratorLoginPassword": "[parameters('administrator_login_password')]",
+        "availabilityZone":           "[parameters('availability_zone')]",
+        "Storage": {
+          "StorageSizeGB": "[parameters('storage_size_gb')]",
+          "Autogrow":      "[parameters('storage_autogrow')]"
+        },
+        "Network": "[if(empty(parameters('network')), json('null'), parameters('network'))]",
+        "Backup": {
+          "backupRetentionDays": "[parameters('backup_retention_days')]",
+          "geoRedundantBackup":  "[parameters('geo_redundant_backup')]"
+        },
+        "highAvailability": {
+          "mode":                    "[parameters('ha_mode')]",
+          "standbyAvailabilityZone": "[parameters('standby_availability_zone')]"
+        },
         "cluster": {
           "clusterSize": "[parameters('cluster_size')]"
-        }
+        },
+        "activeDirectoryAuth": "[parameters('active_directory_auth')]",
+        "passwordAuth":        "[parameters('password_auth')]"
       }
     }
   ]
