@@ -34,10 +34,6 @@ output "administrator_login_password" {
   value = "placeholder"
 }
 
-output "password_auth" {
-  value = "Disabled"
-}
-
 output "backup_retention_days" {
   value = "7"
 }
@@ -47,6 +43,10 @@ output "geo_redundant_backup" {
 }
 
 output "active_directory_auth" {
+  value = "Enabled"
+}
+
+output "password_auth" {
   value = "Disabled"
 }
 

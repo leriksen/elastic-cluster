@@ -70,6 +70,18 @@ resource "azurerm_resource_group_template_deployment" "elastic_cluster" {
     active_directory_auth = {
       value = module.global.active_directory_auth
     }
+    tenant_id = {
+      value = data.azurerm_client_config.current.tenant_id
+    }
+    principal_name = {
+      value = data.azuread_user.self.display_name
+    }
+    principal_type = {
+      value = "User"
+    }
+    principal_id = {
+      value = data.azurerm_client_config.current.object_id
+    }
   })
 }
 #
