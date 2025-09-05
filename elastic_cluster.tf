@@ -58,17 +58,21 @@ resource "azurerm_resource_group_template_deployment" "elastic_cluster" {
     tenant_id = {
       value = data.azurerm_client_config.current.tenant_id
     }
-    principal_name = {
-      value = data.azuread_user.self.display_name
-    }
-    principal_type = {
-      value = "User"
-    }
-    principal_id = {
-      value = data.azurerm_client_config.current.object_id
-    }
-    require_secure_transport = {
-      value = module.global.require_secure_transport
-    }
   })
+}
+
+resource "azurerm_postgresql_flexible_server_active_directory_administrator" "aad" {
+  object_id           = data.azurerm_client_config.current.object_id
+  principal_name      = data.azuread_user.self.display_name
+  principal_type      = "User"
+  resource_group_name = data.azurerm_resource_group.rg.name
+  server_name         = jsondecode(azurerm_resource_group_template_deployment.elastic_cluster.output_content).name.value
+  tenant_id           = data.azurerm_client_config.current.tenant_id
+}
+
+resource "azurerm_postgresql_flexible_server_configuration" "config" {
+  for_each  = module.global.server_configs
+  name      = each.key
+  server_id = jsondecode(azurerm_resource_group_template_deployment.elastic_cluster.output_content).id.value
+  value     = each.value
 }

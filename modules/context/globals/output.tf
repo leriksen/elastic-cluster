@@ -66,6 +66,8 @@ output "storage_size_gb" {
   value = "64"
 }
 
-output "require_secure_transport" {
-  value = "OFF"
+output "server_configs" {
+  value = {
+    require_secure_transport = "OFF"
+  }
 }

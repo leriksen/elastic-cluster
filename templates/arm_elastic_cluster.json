@@ -59,18 +59,6 @@
     },
     "tenant_id": {
       "type": "string"
-    },
-    "principal_name": {
-      "type": "string"
-    },
-    "principal_type": {
-      "type":  "string"
-    },
-    "principal_id": {
-      "type":  "string"
-    },
-    "require_secure_transport": {
-      "type": "string"
     }
   },
   "variables": {},
@@ -112,31 +100,16 @@
         },
         "version":                    "[parameters('version')]"
       }
-    },
-    {
-      "type":       "Microsoft.DBforPostgreSQL/flexibleServers/administrators",
-      "apiVersion": "2025-01-01-preview",
-      "name":       "[concat(parameters('name'), '/', parameters('principal_id'))]",
-      "properties": {
-        "principalName": "[parameters('principal_name')]",
-        "principalType": "[parameters('principal_type')]",
-        "tenantId":      "[parameters('tenant_id')]"
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('name'))]"
-      ]
-    },
-    {
-      "type":       "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
-      "apiVersion": "2025-01-01-preview",
-      "name":       "[concat(parameters('name'), '/', 'require_secure_transport')]",
-      "properties": {
-        "source": "user-override",
-        "value":  "[parameters('require_secure_transport')]"
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('name'))]"
-      ]
     }
-  ]
+  ],
+  "outputs": {
+    "id": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('name'))]"
+    },
+    "name": {
+      "type": "string",
+      "value": "[parameters('name')]"
+    }
+  }
 }
