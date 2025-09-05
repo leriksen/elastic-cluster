@@ -47,7 +47,7 @@ output "active_directory_auth" {
 }
 
 output "password_auth" {
-  value = "Disabled"
+  value = "Enabled"
 }
 
 output "ha_mode" {
@@ -64,4 +64,8 @@ output "storage_autogrow" {
 
 output "storage_size_gb" {
   value = "64"
+}
+
+output "require_secure_transport" {
+  value = "OFF"
 }

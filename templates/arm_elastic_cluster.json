@@ -68,6 +68,9 @@
     },
     "principal_id": {
       "type":  "string"
+    },
+    "require_secure_transport": {
+      "type": "string"
     }
   },
   "variables": {},
@@ -82,6 +85,8 @@
         "tier": "[parameters('sku_tier')]"
       },
       "properties": {
+        "administratorLogin":         "[parameters('administrator_login')]",
+        "administratorLoginPassword": "[parameters('administrator_login_password')]",
         "authConfig": {
           "activeDirectoryAuth": "[parameters('active_directory_auth')]",
           "passwordAuth":        "[parameters('password_auth')]",
@@ -116,6 +121,18 @@
         "principalName": "[parameters('principal_name')]",
         "principalType": "[parameters('principal_type')]",
         "tenantId":      "[parameters('tenant_id')]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('name'))]"
+      ]
+    },
+    {
+      "type":       "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+      "apiVersion": "2025-01-01-preview",
+      "name":       "[concat(parameters('name'), '/', 'require_secure_transport')]",
+      "properties": {
+        "source": "user-override",
+        "value":  "[parameters('require_secure_transport')]"
       },
       "dependsOn": [
         "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('name'))]"
