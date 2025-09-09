@@ -3,62 +3,62 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "name": {
-      "type": "String"
+      "type": "string"
     },
     "location": {
-      "type": "String"
+      "type": "string"
     },
     "version": {
-      "type": "String"
+      "type": "string"
     },
     "cluster_size": {
-      "type": "String"
+      "type": "string"
     },
     "sku_name": {
-      "type": "String"
+      "type": "string"
     },
     "sku_tier": {
-      "type": "String"
+      "type": "string"
     },
     "availability_zone": {
-      "type": "String"
+      "type": "string"
     },
     "administrator_login": {
-      "type": "String"
+      "type": "string"
     },
     "administrator_login_password": {
-      "type":  "String"
+      "type":  "string"
     },
     "password_auth": {
-      "type":  "String"
+      "type":  "string"
     },
     "backup_retention_days": {
-      "type": "String"
+      "type": "string"
     },
     "geo_redundant_backup":{
-      "type": "String"
+      "type": "string"
     },
     "active_directory_auth": {
-      "type": "String"
+      "type": "string"
     },
     "ha_mode": {
-      "type": "String"
+      "type": "string"
     },
     "standby_availability_zone": {
-      "type": "String"
+      "type": "string"
     },
     "storage_autogrow": {
-      "type": "String"
+      "type": "string"
     },
     "storage_size_gb": {
-      "type": "String"
+      "type": "string"
     },
     "network": {
       "type": "object",
       "defaultValue": {}
     },
     "tenant_id": {
-      "type": "String"
+      "type": "string"
     }
   },
   "variables": {},
@@ -85,6 +85,9 @@
           "backupRetentionDays": "[parameters('backup_retention_days')]",
           "geoRedundantBackup":  "[parameters('geo_redundant_backup')]"
         },
+        "cluster": {
+          "clusterSize": "[parameters('cluster_size')]"
+        },
         "createMode":                 "Default",
         "highAvailability": {
           "mode":                    "[parameters('ha_mode')]",
@@ -101,11 +104,11 @@
   ],
   "outputs": {
     "id": {
-      "type": "String",
+      "type": "string",
       "value": "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('name'))]"
     },
     "name": {
-      "type": "String",
+      "type": "string",
       "value": "[parameters('name')]"
     }
   }
