@@ -27,7 +27,7 @@ output "availability_zone" {
 }
 
 output "administrator_login" {
-  value = "placeholder"
+  value = "psqladmin"
 }
 
 output "administrator_login_password" {
@@ -47,7 +47,7 @@ output "active_directory_auth" {
 }
 
 output "password_auth" {
-  value = "Enabled"
+  value = "Disabled"
 }
 
 output "ha_mode" {

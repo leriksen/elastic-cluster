@@ -3,62 +3,62 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "name": {
-      "type": "string"
+      "type": "String"
     },
     "location": {
-      "type": "string"
+      "type": "String"
     },
     "version": {
-      "type": "string"
+      "type": "String"
     },
     "cluster_size": {
-      "type": "string"
+      "type": "String"
     },
     "sku_name": {
-      "type": "string"
+      "type": "String"
     },
     "sku_tier": {
-      "type": "string"
+      "type": "String"
     },
     "availability_zone": {
-      "type": "string"
+      "type": "String"
     },
     "administrator_login": {
-      "type": "string"
+      "type": "String"
     },
     "administrator_login_password": {
-      "type":  "string"
+      "type":  "String"
     },
     "password_auth": {
-      "type":  "string"
+      "type":  "String"
     },
     "backup_retention_days": {
-      "type": "string"
+      "type": "String"
     },
     "geo_redundant_backup":{
-      "type": "string"
+      "type": "String"
     },
     "active_directory_auth": {
-      "type": "string"
+      "type": "String"
     },
     "ha_mode": {
-      "type": "string"
+      "type": "String"
     },
     "standby_availability_zone": {
-      "type": "string"
+      "type": "String"
     },
     "storage_autogrow": {
-      "type": "string"
+      "type": "String"
     },
     "storage_size_gb": {
-      "type": "string"
+      "type": "String"
     },
     "network": {
       "type": "object",
       "defaultValue": {}
     },
     "tenant_id": {
-      "type": "string"
+      "type": "String"
     }
   },
   "variables": {},
@@ -85,15 +85,12 @@
           "backupRetentionDays": "[parameters('backup_retention_days')]",
           "geoRedundantBackup":  "[parameters('geo_redundant_backup')]"
         },
-        "cluster": {
-          "clusterSize": "[parameters('cluster_size')]"
-        },
         "createMode":                 "Default",
         "highAvailability": {
           "mode":                    "[parameters('ha_mode')]",
           "standbyAvailabilityZone": "[parameters('standby_availability_zone')]"
         },
-        "network": "[if(empty(parameters('network')), json('null'), parameters('network'))]",
+        "network":                    "[parameters('network')]",
         "storage": {
           "StorageSizeGB": "[parameters('storage_size_gb')]",
           "Autogrow":      "[parameters('storage_autogrow')]"
@@ -104,11 +101,11 @@
   ],
   "outputs": {
     "id": {
-      "type": "string",
+      "type": "String",
       "value": "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('name'))]"
     },
     "name": {
-      "type": "string",
+      "type": "String",
       "value": "[parameters('name')]"
     }
   }

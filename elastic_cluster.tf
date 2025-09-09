@@ -76,3 +76,10 @@ resource "azurerm_postgresql_flexible_server_configuration" "config" {
   server_id = jsondecode(azurerm_resource_group_template_deployment.elastic_cluster.output_content).id.value
   value     = each.value
 }
+
+resource "azurerm_postgresql_flexible_server_firewall_rule" "all" {
+  end_ip_address   = "255.255.255.255"
+  name             = "all"
+  server_id        = jsondecode(azurerm_resource_group_template_deployment.elastic_cluster.output_content).id.value
+  start_ip_address = "0.0.0.0"
+}
