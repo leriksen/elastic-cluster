@@ -4,6 +4,6 @@
 # }
 
 variable "index" {
-  type = string
+  type    = string
   default = "01"
 }

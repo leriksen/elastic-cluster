@@ -1,8 +1,9 @@
-data azurerm_client_config "current" {}
+data "azurerm_client_config" "current" {}
 
-data azurerm_resource_group rg {
-  name = "jhg"
+data "azurerm_resource_group" "rg" {
+  name = azurerm_resource_group.psql_fs_ec.name
 }
+
 #
 # data "azuread_service_principal" "self" {
 #   object_id = data.azurerm_client_config.current.object_id
@@ -13,6 +14,6 @@ data azurerm_resource_group rg {
 #   security_enabled = true
 # }
 
-data "azuread_user" "self" {
+data "azuread_service_principal" "self" {
   object_id = data.azurerm_client_config.current.object_id
 }

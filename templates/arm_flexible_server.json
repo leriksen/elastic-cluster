@@ -5,19 +5,10 @@
     "active_directory_auth": {
       "type": "String"
     },
-    "administrator_login": {
-      "type": "String"
-    },
-    "administrator_login_password": {
-      "type":  "String"
-    },
     "availability_zone": {
       "type": "String"
     },
     "backup_retention_days": {
-      "type": "String"
-    },
-    "cluster_size": {
       "type": "String"
     },
     "cmk_assigned_identity": {
@@ -26,7 +17,7 @@
     "cmk_key_uri": {
       "type": "String"
     },
-    "geo_redundant_backup":{
+    "geo_redundant_backup": {
       "type": "String"
     },
     "ha_mode": {
@@ -43,7 +34,7 @@
       "defaultValue": {}
     },
     "password_auth": {
-      "type":  "String"
+      "type": "String"
     },
     "sku_name": {
       "type": "String"
@@ -79,37 +70,30 @@
         "tier": "[parameters('sku_tier')]"
       },
       "properties": {
-        "administratorLogin":         "[parameters('administrator_login')]",
-        "administratorLoginPassword": "[parameters('administrator_login_password')]",
         "authConfig": {
           "activeDirectoryAuth": "[parameters('active_directory_auth')]",
-          "passwordAuth":        "[parameters('password_auth')]",
-          "tenantId":            "[parameters('tenant_id')]"
+          "passwordAuth": "[parameters('password_auth')]",
+          "tenantId": "[parameters('tenant_id')]"
         },
-        "availabilityZone":           "[parameters('availability_zone')]",
+        "availabilityZone": "[parameters('availability_zone')]",
         "backup": {
           "backupRetentionDays": "[parameters('backup_retention_days')]",
-          "geoRedundantBackup":  "[parameters('geo_redundant_backup')]"
+          "geoRedundantBackup": "[parameters('geo_redundant_backup')]"
         },
-        "cluster": {
-          "clusterSize": "[parameters('cluster_size')]"
-        },
-        "createMode":                 "Default",
+        "createMode": "Default",
         "dataEncryption": {
-          "type"                         : "AzureKeyVault",
-          "primaryUserAssignedIdentityId": "[parameters('cmk_assigned_identity')]",
-          "primaryKeyURI"                : "[parameters('cmk_key_uri')]"
+          "type": "SystemManaged"
         },
-        "highAvailability"                     : {
-          "mode":                    "[parameters('ha_mode')]",
+        "highAvailability": {
+          "mode": "[parameters('ha_mode')]",
           "standbyAvailabilityZone": "[parameters('standby_availability_zone')]"
         },
-        "network":                    "[parameters('network')]",
+        "network": "[parameters('network')]",
         "storage": {
           "StorageSizeGB": "[parameters('storage_size_gb')]",
-          "Autogrow":      "[parameters('storage_autogrow')]"
+          "Autogrow": "[parameters('storage_autogrow')]"
         },
-        "version":                    "[parameters('version')]"
+        "version": "[parameters('version')]"
       }
     }
   ],

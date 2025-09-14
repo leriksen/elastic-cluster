@@ -1,0 +1,56 @@
+{
+  "active_directory_auth": {
+    "value": "${active_directory_auth}"
+  },
+  "availability_zone": {
+    "value": "${availability_zone}"
+  },
+  "backup_retention_days": {
+    "value": "${backup_retention_days}"
+  },
+  "cluster_size": {
+    "value": "${cluster_size}"
+  },
+  "cmk_assigned_identity": {
+    "value": "${cmk_assigned_identity}"
+  },
+  "cmk_key_uri": {
+    "value": "${cmk_key_uri}"
+  },
+  "geo_redundant_backup": {
+    "value": "${geo_redundant_backup}"
+  },
+  "ha_mode": {
+    "value": "${ha_mode}"
+  },
+  "location": {
+    "value": "${location}"
+  },
+  "name": {
+    "value": "${name}"
+  },
+  "password_auth": {
+    "value": "${password_auth}"
+  },
+  "sku_name": {
+    "value": "${sku_name}"
+  },
+  "sku_tier": {
+    "value": "${sku_tier}"
+  },
+  "standby_availability_zone": {
+    "value": "${standby_availability_zone}"
+  },
+  "storage_autogrow": {
+    "value": "${storage_autogrow}"
+  },
+  "storage_size_gb": {
+    "value": "${storage_size_gb}"
+  },
+  "tenant_id": {
+    "value": "${tenant_id}"
+  },
+  "version": {
+    "value": "${version}"
+  }
+}
