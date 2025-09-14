@@ -32,38 +32,33 @@ resource "azurerm_resource_group_template_deployment" "flexible_server" {
   )
 }
 
-# resource "azurerm_postgresql_flexible_server_active_directory_administrator" "fs_aad" {
-#   object_id           = data.azurerm_client_config.current.object_id
-#   principal_name      = data.azuread_service_principal.self.display_name
-#   principal_type      = "ServicePrincipal"
-#   resource_group_name = data.azurerm_resource_group.rg.name
-#   # server_name         = jsondecode(azurerm_resource_group_template_deployment.flexible_server.output_content).name["value"]
-#   server_name         = azurerm_postgresql_flexible_server.flexible_server.name
-#   tenant_id           = data.azurerm_client_config.current.tenant_id
-# }
-#
-# resource "azurerm_postgresql_flexible_server_configuration" "fs_config" {
-#   for_each  = module.global.server_configs
-#   name      = each.key
-#   # server_id = jsondecode(azurerm_resource_group_template_deployment.flexible_server.output_content).id["value"]
-#   server_id = azurerm_postgresql_flexible_server.flexible_server.id
-#   value     = each.value
-# }
-#
-# resource "azurerm_postgresql_flexible_server_firewall_rule" "fs_all" {
-#   end_ip_address   = "255.255.255.255"
-#   name             = "all"
-# #   server_id        = jsondecode(azurerm_resource_group_template_deployment.flexible_server.output_content).id["value"]
-#   server_id        = azurerm_postgresql_flexible_server.flexible_server.id
-#   start_ip_address = "0.0.0.0"
-# }
-#
-# output "fs_id" {
-# #   value = jsondecode(azurerm_resource_group_template_deployment.flexible_server.output_content).id.value
-#   value = azurerm_postgresql_flexible_server.flexible_server.id
-# }
-#
-# output "fs_name" {
-# #   value = jsondecode(azurerm_resource_group_template_deployment.flexible_server.output_content).name.value
-#   value = azurerm_postgresql_flexible_server.flexible_server.name
-# }
+resource "azurerm_postgresql_flexible_server_active_directory_administrator" "fs_aad" {
+  object_id           = data.azurerm_client_config.current.object_id
+  principal_name      = data.azuread_service_principal.self.display_name
+  principal_type      = "ServicePrincipal"
+  resource_group_name = data.azurerm_resource_group.rg.name
+  server_name         = jsondecode(azurerm_resource_group_template_deployment.flexible_server.output_content).name["value"]
+  tenant_id           = data.azurerm_client_config.current.tenant_id
+}
+
+resource "azurerm_postgresql_flexible_server_configuration" "fs_config" {
+  for_each  = module.global.server_configs
+  name      = each.key
+  server_id = jsondecode(azurerm_resource_group_template_deployment.flexible_server.output_content).id["value"]
+  value     = each.value
+}
+
+resource "azurerm_postgresql_flexible_server_firewall_rule" "fs_all" {
+  end_ip_address   = "255.255.255.255"
+  name             = "all"
+  server_id        = jsondecode(azurerm_resource_group_template_deployment.flexible_server.output_content).id["value"]
+  start_ip_address = "0.0.0.0"
+}
+
+output "fs_id" {
+  value = jsondecode(azurerm_resource_group_template_deployment.flexible_server.output_content).id.value
+}
+
+output "fs_name" {
+  value = jsondecode(azurerm_resource_group_template_deployment.flexible_server.output_content).name.value
+}

@@ -33,28 +33,28 @@ resource "azurerm_resource_group_template_deployment" "elastic_cluster" {
   )
 }
 
-# resource "azurerm_postgresql_flexible_server_active_directory_administrator" "ec_aad" {
-#   object_id           = data.azurerm_client_config.current.object_id
-#   principal_name      = data.azuread_service_principal.self.display_name
-#   principal_type      = "ServicePrincipal"
-#   resource_group_name = data.azurerm_resource_group.rg.name
-#   server_name         = lookup(jsondecode(azurerm_resource_group_template_deployment.elastic_cluster.output_content).name, "value")
-#   tenant_id           = data.azurerm_client_config.current.tenant_id
-# }
-#
-# resource "azurerm_postgresql_flexible_server_configuration" "ec_config" {
-#   for_each  = module.global.server_configs
-#   name      = each.key
-#   server_id = lookup(jsondecode(azurerm_resource_group_template_deployment.elastic_cluster.output_content).id, "value")
-#   value     = each.value
-# }
-#
-# resource "azurerm_postgresql_flexible_server_firewall_rule" "ec_all" {
-#   end_ip_address   = "255.255.255.255"
-#   name             = "all"
-#   server_id        = lookup(jsondecode(azurerm_resource_group_template_deployment.elastic_cluster.output_content).id, "value")
-#   start_ip_address = "0.0.0.0"
-# }
+resource "azurerm_postgresql_flexible_server_active_directory_administrator" "ec_aad" {
+  object_id           = data.azurerm_client_config.current.object_id
+  principal_name      = data.azuread_service_principal.self.display_name
+  principal_type      = "ServicePrincipal"
+  resource_group_name = data.azurerm_resource_group.rg.name
+  server_name         = lookup(jsondecode(azurerm_resource_group_template_deployment.elastic_cluster.output_content).name, "value")
+  tenant_id           = data.azurerm_client_config.current.tenant_id
+}
+
+resource "azurerm_postgresql_flexible_server_configuration" "ec_config" {
+  for_each  = module.global.server_configs
+  name      = each.key
+  server_id = lookup(jsondecode(azurerm_resource_group_template_deployment.elastic_cluster.output_content).id, "value")
+  value     = each.value
+}
+
+resource "azurerm_postgresql_flexible_server_firewall_rule" "ec_all" {
+  end_ip_address   = "255.255.255.255"
+  name             = "all"
+  server_id        = lookup(jsondecode(azurerm_resource_group_template_deployment.elastic_cluster.output_content).id, "value")
+  start_ip_address = "0.0.0.0"
+}
 
 output "ec_id" {
   value = jsondecode(azurerm_resource_group_template_deployment.elastic_cluster.output_content).id.value
