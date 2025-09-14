@@ -14,6 +14,9 @@
     "cmk_assigned_identity": {
       "type": "String"
     },
+    "cmk_encryption_type": {
+      "type": "String"
+    },
     "cmk_key_uri": {
       "type": "String"
     },
@@ -21,6 +24,9 @@
       "type": "String"
     },
     "ha_mode": {
+      "type": "String"
+    },
+    "identity_type": {
       "type": "String"
     },
     "location": {
@@ -61,37 +67,45 @@
   "variables": {},
   "resources": [
     {
-      "type": "Microsoft.DBforPostgreSQL/flexibleServers",
+      "type"      : "Microsoft.DBforPostgreSQL/flexibleServers",
       "apiVersion": "2025-01-01-preview",
-      "name": "[parameters('name')]",
-      "location": "[parameters('location')]",
+      "name"      : "[parameters('name')]",
+      "location"  : "[parameters('location')]",
       "sku": {
         "name": "[parameters('sku_name')]",
         "tier": "[parameters('sku_tier')]"
       },
+      "identity": {
+        "type": "[parameters('identity_type')]",
+        "userAssignedIdentities": {
+          "[parameters('cmk_assigned_identity')]": {}
+        }
+      },
       "properties": {
         "authConfig": {
           "activeDirectoryAuth": "[parameters('active_directory_auth')]",
-          "passwordAuth": "[parameters('password_auth')]",
-          "tenantId": "[parameters('tenant_id')]"
+          "passwordAuth"       : "[parameters('password_auth')]",
+          "tenantId"           : "[parameters('tenant_id')]"
         },
         "availabilityZone": "[parameters('availability_zone')]",
         "backup": {
           "backupRetentionDays": "[parameters('backup_retention_days')]",
-          "geoRedundantBackup": "[parameters('geo_redundant_backup')]"
+          "geoRedundantBackup" : "[parameters('geo_redundant_backup')]"
         },
         "createMode": "Default",
         "dataEncryption": {
-          "type": "SystemManaged"
+          "type"                         : "[parameters('cmk_encryption_type')]",
+          "primaryKeyURI"                : "[parameters('cmk_key_uri')]",
+          "primaryUserAssignedIdentityId": "[parameters('cmk_assigned_identity')]"
         },
         "highAvailability": {
-          "mode": "[parameters('ha_mode')]",
+          "mode"                   : "[parameters('ha_mode')]",
           "standbyAvailabilityZone": "[parameters('standby_availability_zone')]"
         },
         "network": "[parameters('network')]",
         "storage": {
           "StorageSizeGB": "[parameters('storage_size_gb')]",
-          "Autogrow": "[parameters('storage_autogrow')]"
+          "Autogrow"     : "[parameters('storage_autogrow')]"
         },
         "version": "[parameters('version')]"
       }
@@ -99,11 +113,11 @@
   ],
   "outputs": {
     "id": {
-      "type": "String",
+      "type" : "String",
       "value": "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('name'))]"
     },
-    "name": {
-      "type": "String",
+    "name" : {
+      "type" : "String",
       "value": "[parameters('name')]"
     }
   }

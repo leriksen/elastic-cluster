@@ -11,6 +11,9 @@
   "cmk_assigned_identity": {
     "value": "${cmk_assigned_identity}"
   },
+  "cmk_encryption_type": {
+    "value": "${cmk_encryption_type}"
+  },
   "cmk_key_uri": {
     "value": "${cmk_key_uri}"
   },
@@ -19,6 +22,9 @@
   },
   "ha_mode": {
     "value": "${ha_mode}"
+  },
+  "identity_type": {
+    "value": "${identity_type}"
   },
   "location": {
     "value": "${location}"

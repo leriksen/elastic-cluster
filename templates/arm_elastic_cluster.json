@@ -5,12 +5,6 @@
     "active_directory_auth": {
       "type": "String"
     },
-    "administrator_login": {
-      "type": "String"
-    },
-    "administrator_login_password": {
-      "type":  "String"
-    },
     "availability_zone": {
       "type": "String"
     },
@@ -23,13 +17,19 @@
     "cmk_assigned_identity": {
       "type": "String"
     },
+    "cmk_encryption_type": {
+      "type": "String"
+    },
     "cmk_key_uri": {
       "type": "String"
     },
-    "geo_redundant_backup":{
+    "geo_redundant_backup": {
       "type": "String"
     },
     "ha_mode": {
+      "type": "String"
+    },
+    "identity_type": {
       "type": "String"
     },
     "location": {
@@ -43,7 +43,7 @@
       "defaultValue": {}
     },
     "password_auth": {
-      "type":  "String"
+      "type": "String"
     },
     "sku_name": {
       "type": "String"
@@ -70,56 +70,60 @@
   "variables": {},
   "resources": [
     {
-      "type": "Microsoft.DBforPostgreSQL/flexibleServers",
+      "type"      : "Microsoft.DBforPostgreSQL/flexibleServers",
       "apiVersion": "2025-01-01-preview",
-      "name": "[parameters('name')]",
-      "location": "[parameters('location')]",
+      "name"      : "[parameters('name')]",
+      "location"  : "[parameters('location')]",
       "sku": {
         "name": "[parameters('sku_name')]",
         "tier": "[parameters('sku_tier')]"
       },
+      "identity": {
+        "type": "[parameters('identity_type')]",
+        "userAssignedIdentities": {
+          "[parameters('cmk_assigned_identity')]": {}
+        }
+      },
       "properties": {
-        "administratorLogin":         "[parameters('administrator_login')]",
-        "administratorLoginPassword": "[parameters('administrator_login_password')]",
         "authConfig": {
           "activeDirectoryAuth": "[parameters('active_directory_auth')]",
-          "passwordAuth":        "[parameters('password_auth')]",
-          "tenantId":            "[parameters('tenant_id')]"
+          "passwordAuth"       : "[parameters('password_auth')]",
+          "tenantId"           : "[parameters('tenant_id')]"
         },
-        "availabilityZone":           "[parameters('availability_zone')]",
+        "availabilityZone": "[parameters('availability_zone')]",
         "backup": {
           "backupRetentionDays": "[parameters('backup_retention_days')]",
-          "geoRedundantBackup":  "[parameters('geo_redundant_backup')]"
+          "geoRedundantBackup" : "[parameters('geo_redundant_backup')]"
         },
         "cluster": {
           "clusterSize": "[parameters('cluster_size')]"
         },
         "createMode":                 "Default",
         "dataEncryption": {
-          "type"                         : "AzureKeyVault",
-          "primaryUserAssignedIdentityId": "[parameters('cmk_assigned_identity')]",
-          "primaryKeyURI"                : "[parameters('cmk_key_uri')]"
+          "type"                         : "[parameters('cmk_encryption_type')]",
+          "primaryKeyURI"                : "[parameters('cmk_key_uri')]",
+          "primaryUserAssignedIdentityId": "[parameters('cmk_assigned_identity')]"
         },
-        "highAvailability"                     : {
-          "mode":                    "[parameters('ha_mode')]",
+        "highAvailability": {
+          "mode"                   : "[parameters('ha_mode')]",
           "standbyAvailabilityZone": "[parameters('standby_availability_zone')]"
         },
-        "network":                    "[parameters('network')]",
+        "network": "[parameters('network')]",
         "storage": {
           "StorageSizeGB": "[parameters('storage_size_gb')]",
-          "Autogrow":      "[parameters('storage_autogrow')]"
+          "Autogrow"     : "[parameters('storage_autogrow')]"
         },
-        "version":                    "[parameters('version')]"
+        "version": "[parameters('version')]"
       }
     }
   ],
   "outputs": {
     "id": {
-      "type": "String",
+      "type" : "String",
       "value": "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('name'))]"
     },
-    "name": {
-      "type": "String",
+    "name" : {
+      "type" : "String",
       "value": "[parameters('name')]"
     }
   }

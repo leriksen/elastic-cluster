@@ -26,6 +26,10 @@ output "ec_sku_name" {
   value = "Standard_D4ads_v5"
 }
 
+output "encryption_type" {
+  value = "AzureKeyVault"
+}
+
 output "geo_redundant_backup" {
   value = "Disabled"
 }
@@ -36,6 +40,10 @@ output "geo_redundant_backup_bool" {
 
 output "ha_mode" {
   value = "ZoneRedundant"
+}
+
+output "identity_type" {
+  value = "UserAssigned"
 }
 
 output "index" {
