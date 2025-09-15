@@ -32,6 +32,9 @@
   "name": {
     "value": "${name}"
   },
+  "public_network_access": {
+    "value": "${public_network_access}"
+  },
   "password_auth": {
     "value": "${password_auth}"
   },

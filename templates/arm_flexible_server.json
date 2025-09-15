@@ -35,9 +35,8 @@
     "name": {
       "type": "String"
     },
-    "network": {
-      "type": "Object",
-      "defaultValue": {}
+    "public_network_access": {
+      "type": "String"
     },
     "password_auth": {
       "type": "String"
@@ -102,7 +101,9 @@
           "mode"                   : "[parameters('ha_mode')]",
           "standbyAvailabilityZone": "[parameters('standby_availability_zone')]"
         },
-        "network": "[parameters('network')]",
+        "network": {
+          "publicNetworkAccess": "[parameters('public_network_access')]"
+        },
         "storage": {
           "StorageSizeGB": "[parameters('storage_size_gb')]",
           "Autogrow"     : "[parameters('storage_autogrow')]"
