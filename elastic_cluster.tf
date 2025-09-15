@@ -1,11 +1,11 @@
 resource "azurerm_resource_group_template_deployment" "elastic_cluster" {
   depends_on = [
-    azurerm_role_assignment.secret_reader
+    azurerm_role_assignment.cmk_user
   ]
   deployment_mode     = "Incremental"
   name                = format("%s-ec", local.psql_name)
   template_content    = file("${path.module}/templates/arm_elastic_cluster.json")
-  resource_group_name = data.azurerm_resource_group.rg.name
+  resource_group_name = azurerm_resource_group.rg.name
   parameters_content = templatefile(
     "${path.module}/templates/parameters_elastic_cluster.json",
     {
@@ -19,8 +19,8 @@ resource "azurerm_resource_group_template_deployment" "elastic_cluster" {
       geo_redundant_backup      = module.global.geo_redundant_backup,
       ha_mode                   = module.global.ha_mode,
       identity_type             = module.global.identity_type
-      location                  = data.azurerm_resource_group.rg.location,
-      name                      = format("%s-ec-0%s", data.azurerm_resource_group.rg.name, var.index),
+      location                  = azurerm_resource_group.rg.location,
+      name                      = format("%s-ec-0%s", azurerm_resource_group.rg.name, var.index),
       password_auth             = module.global.password_auth,
       sku_name                  = module.global.ec_sku_name,
       sku_tier                  = module.global.sku_tier,
@@ -37,7 +37,7 @@ resource "azurerm_postgresql_flexible_server_active_directory_administrator" "ec
   object_id           = data.azurerm_client_config.current.object_id
   principal_name      = data.azuread_service_principal.self.display_name
   principal_type      = "ServicePrincipal"
-  resource_group_name = data.azurerm_resource_group.rg.name
+  resource_group_name = azurerm_resource_group.rg.name
   server_name         = lookup(jsondecode(azurerm_resource_group_template_deployment.elastic_cluster.output_content).name, "value")
   tenant_id           = data.azurerm_client_config.current.tenant_id
 }
