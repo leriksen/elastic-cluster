@@ -57,6 +57,28 @@ resource "azurerm_postgresql_flexible_server_firewall_rule" "ec_all" {
   start_ip_address = "0.0.0.0"
 }
 
+resource "azurerm_monitor_diagnostic_setting" "ec" {
+  name                       = "ds_ec"
+  target_resource_id         = jsondecode(azurerm_resource_group_template_deployment.elastic_cluster.output_content).id.value
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
+
+  dynamic "enabled_log" {
+    for_each = data.azurerm_monitor_diagnostic_categories.ec.log_category_groups
+    content {
+      category_group = enabled_log.value
+    }
+  }
+
+  # dynamic "enabled_metric" {
+  #   for_each = [
+  #     "AllMetrics"
+  #   ]
+  #   content {
+  #     category = enabled_metric.value
+  #   }
+  # }
+}
+
 output "ec_id" {
   value = jsondecode(azurerm_resource_group_template_deployment.elastic_cluster.output_content).id.value
 }

@@ -49,12 +49,34 @@ resource "azurerm_postgresql_flexible_server_configuration" "fs_config" {
   value     = each.value
 }
 
-# resource "azurerm_postgresql_flexible_server_firewall_rule" "fs_all" {
-#   end_ip_address   = "255.255.255.255"
-#   name             = "all"
-#   server_id        = jsondecode(azurerm_resource_group_template_deployment.flexible_server.output_content).id["value"]
-#   start_ip_address = "0.0.0.0"
-# }
+resource "azurerm_postgresql_flexible_server_firewall_rule" "fs_all" {
+  end_ip_address   = "255.255.255.255"
+  name             = "all"
+  server_id        = jsondecode(azurerm_resource_group_template_deployment.flexible_server.output_content).id["value"]
+  start_ip_address = "0.0.0.0"
+}
+
+resource "azurerm_monitor_diagnostic_setting" "fs" {
+  name                       = "ds_fs"
+  target_resource_id         = jsondecode(azurerm_resource_group_template_deployment.flexible_server.output_content).id.value
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
+
+  dynamic "enabled_log" {
+    for_each = data.azurerm_monitor_diagnostic_categories.fs.log_category_groups
+    content {
+      category_group = enabled_log.value
+    }
+  }
+
+  # dynamic "enabled_metric" {
+  #   for_each = [
+  #     "AllMetrics"
+  #   ]
+  #   content {
+  #     category = enabled_metric.value
+  #   }
+  # }
+}
 
 output "fs_id" {
   value = jsondecode(azurerm_resource_group_template_deployment.flexible_server.output_content).id.value

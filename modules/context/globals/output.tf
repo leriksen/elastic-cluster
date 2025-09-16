@@ -92,8 +92,10 @@ output "storage_autogrow_bool" {
 
 output "server_configs" {
   value = {
-    require_secure_transport = "OFF"
-
+    "require_secure_transport"              = "OFF"
+    "pg_qs.query_capture_mode"              = "ALL"
+    "pgms_wait_sampling.query_capture_mode" = "ALL"
+    "track_io_timing"                       = "ON"
   }
 }
 
