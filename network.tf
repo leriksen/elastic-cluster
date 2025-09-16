@@ -90,17 +90,40 @@ resource "azurerm_public_ip" "ip01" {
   allocation_method   = "Static"
 }
 
-# resource "azurerm_private_endpoint" "psql-pe01" {
-#   location            = azurerm_resource_group.rg.location
-#   name                = "psql-fs-pe01"
-#   resource_group_name = azurerm_resource_group.rg.name
-#   subnet_id           = azurerm_subnet.pe01.id
-#
-#   private_service_connection {
-#     name                           = "psql-fs-pe01-psc"
-#     private_connection_resource_id = jsondecode(azurerm_resource_group_template_deployment.flexible_server.output_content).id.value
-#     subresource_names              = ["postgresqlServer"]
-#     is_manual_connection           = false
-#   }
-# }
+resource "azurerm_private_endpoint" "psql-pe01-fs" {
+  location            = azurerm_resource_group.rg.location
+  name                = "psql-pe01-fs"
+  resource_group_name = azurerm_resource_group.rg.name
+  subnet_id           = azurerm_subnet.pe01.id
 
+  private_service_connection {
+    name                           = "psql-pe01-fs-psc"
+    private_connection_resource_id = jsondecode(azurerm_resource_group_template_deployment.flexible_server.output_content).id.value
+    subresource_names              = ["postgresqlServer"]
+    is_manual_connection           = false
+  }
+
+  private_dns_zone_group {
+    name                 = "psql-pe01-fs-dns-zone-group"
+    private_dns_zone_ids = [azurerm_private_dns_zone.psql.id]
+  }
+}
+
+resource "azurerm_private_endpoint" "psql-pe01-ec" {
+  location            = azurerm_resource_group.rg.location
+  name                = "psql-pe010-ec"
+  resource_group_name = azurerm_resource_group.rg.name
+  subnet_id           = azurerm_subnet.pe01.id
+
+  private_service_connection {
+    name                           = "psql-pe01-ec-psc"
+    private_connection_resource_id = jsondecode(azurerm_resource_group_template_deployment.elastic_cluster.output_content).id.value
+    subresource_names              = ["postgresqlServer"]
+    is_manual_connection           = false
+  }
+
+  private_dns_zone_group {
+    name                 = "psql-pe01-ec-dns-zone-group"
+    private_dns_zone_ids = [azurerm_private_dns_zone.psql.id]
+  }
+}

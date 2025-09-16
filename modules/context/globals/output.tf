@@ -67,7 +67,7 @@ output "pg_version" {
 }
 
 output "public_network_access" {
-  value = "Enabled"
+  value = "Disabled"
 }
 
 output "standby_availability_zone" {
