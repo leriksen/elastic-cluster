@@ -38,7 +38,7 @@ resource "azurerm_resource_group_template_deployment" "flexible_server" {
 
 resource "azurerm_resource_group_template_deployment" "fs_replica" {
   deployment_mode     = "Incremental"
-  name                = format("%s-fs-replica", local.fs_name)
+  name                = local.fs_replica_name
   template_content    = file("${path.module}/templates/arm_flexible_server.json")
   resource_group_name = azurerm_resource_group.rg.name
   parameters_content = templatefile(

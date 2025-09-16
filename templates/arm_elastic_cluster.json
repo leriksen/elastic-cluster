@@ -120,7 +120,7 @@
           "publicNetworkAccess": "[parameters('public_network_access')]"
         },
         "replicationRole":        "[parameters('replication_role')]",
-        "sourceServerResourceId": "[parameters('source_server_id')]",
+        "sourceServerResourceId": "[if(not(empty(parameters('source_server_id'))), parameters('source_server_id'), json('null'))]",
         "storage": {
           "StorageSizeGB": "[parameters('storage_size_gb')]",
           "Autogrow"     : "[parameters('storage_autogrow')]"
