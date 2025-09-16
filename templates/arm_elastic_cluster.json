@@ -119,7 +119,8 @@
         "network": {
           "publicNetworkAccess": "[parameters('public_network_access')]"
         },
-        "replicationRole": "[parameters('replication_role')]",
+        "replicationRole":        "[parameters('replication_role')]",
+        "sourceServerResourceId": "[parameters('source_server_id')]",
         "storage": {
           "StorageSizeGB": "[parameters('storage_size_gb')]",
           "Autogrow"     : "[parameters('storage_autogrow')]"

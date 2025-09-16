@@ -56,11 +56,11 @@ resource "azurerm_resource_group_template_deployment" "elastic_cluster" {
 #       ha_mode                   = module.global.ha_mode
 #       identity_type             = module.global.identity_type
 #       location                  = azurerm_resource_group.rg.location
-#       name                      = format("%s-ec-replica", local.ec_name)
+#       name                      = local.ec_replica_name
 #       password_auth             = module.global.password_auth
 #       public_network_access     = module.global.public_network_access
 #       replication_role          = "Async"
-#       source_server_id          = lookup(jsondecode(azurerm_resource_group_template_deployment.elastic_cluster.output_content).id, "value")
+#       source_server_id          = data.azurerm_postgresql_flexible_server.ec.id
 #       sku_name                  = module.global.ec_sku_name
 #       sku_tier                  = module.global.sku_tier
 #       standby_availability_zone = module.global.standby_availability_zone
