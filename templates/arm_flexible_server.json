@@ -20,6 +20,9 @@
     "cmk_key_uri": {
       "type": "String"
     },
+    "create_mode": {
+      "type": "String"
+    },
     "geo_redundant_backup": {
       "type": "String"
     },
@@ -41,10 +44,16 @@
     "password_auth": {
       "type": "String"
     },
+    "replication_role": {
+      "type": "String"
+    },
     "sku_name": {
       "type": "String"
     },
     "sku_tier": {
+      "type": "String"
+    },
+    "source_server_id": {
       "type": "String"
     },
     "standby_availability_zone": {
@@ -91,7 +100,7 @@
           "backupRetentionDays": "[parameters('backup_retention_days')]",
           "geoRedundantBackup" : "[parameters('geo_redundant_backup')]"
         },
-        "createMode": "Default",
+        "createMode": "[parameters('create_mode')]",
         "dataEncryption": {
           "type"                         : "[parameters('cmk_encryption_type')]",
           "primaryKeyURI"                : "[parameters('cmk_key_uri')]",
@@ -104,6 +113,8 @@
         "network": {
           "publicNetworkAccess": "[parameters('public_network_access')]"
         },
+        "replicationRole": "[parameters('replication_role')]",
+        "sourceServerId": "[parameters('source_server_id')]",
         "storage": {
           "StorageSizeGB": "[parameters('storage_size_gb')]",
           "Autogrow"     : "[parameters('storage_autogrow')]"
@@ -111,15 +122,5 @@
         "version": "[parameters('version')]"
       }
     }
-  ],
-  "outputs": {
-    "id": {
-      "type" : "String",
-      "value": "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('name'))]"
-    },
-    "name" : {
-      "type" : "String",
-      "value": "[parameters('name')]"
-    }
-  }
+  ]
 }

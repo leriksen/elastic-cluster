@@ -12,5 +12,5 @@ Components: main
 Architectures: $(dpkg --print-architecture)
 Signed-by: /etc/apt/keyrings/microsoft.gpg" | sudo tee /etc/apt/sources.list.d/azure-cli.sources
 sudo apt-get update
-sudo apt-get install -y azure-cli
+sudo apt-get install -y azure-cli jq
 

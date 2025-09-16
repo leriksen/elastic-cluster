@@ -98,7 +98,7 @@ resource "azurerm_private_endpoint" "psql-pe01-fs" {
 
   private_service_connection {
     name                           = "psql-pe01-fs-psc"
-    private_connection_resource_id = jsondecode(azurerm_resource_group_template_deployment.flexible_server.output_content).id.value
+    private_connection_resource_id = data.azurerm_postgresql_flexible_server.fs.id
     subresource_names              = ["postgresqlServer"]
     is_manual_connection           = false
   }
@@ -117,7 +117,7 @@ resource "azurerm_private_endpoint" "psql-pe01-ec" {
 
   private_service_connection {
     name                           = "psql-pe01-ec-psc"
-    private_connection_resource_id = jsondecode(azurerm_resource_group_template_deployment.elastic_cluster.output_content).id.value
+    private_connection_resource_id = data.azurerm_postgresql_flexible_server.ec.id
     subresource_names              = ["postgresqlServer"]
     is_manual_connection           = false
   }

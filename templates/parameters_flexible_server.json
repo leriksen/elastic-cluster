@@ -17,6 +17,9 @@
   "cmk_key_uri": {
     "value": "${cmk_key_uri}"
   },
+  "create_mode": {
+    "value": "${create_mode}"
+  },
   "geo_redundant_backup": {
     "value": "${geo_redundant_backup}"
   },
@@ -38,11 +41,17 @@
   "password_auth": {
     "value": "${password_auth}"
   },
+  "replication_role": {
+    "value": "${replication_role}"
+  },
   "sku_name": {
     "value": "${sku_name}"
   },
   "sku_tier": {
     "value": "${sku_tier}"
+  },
+  "source_server_id": {
+    "value": "${source_server_id}"
   },
   "standby_availability_zone": {
     "value": "${standby_availability_zone}"
