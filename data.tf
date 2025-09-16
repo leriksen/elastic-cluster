@@ -13,6 +13,14 @@ data azurerm_postgresql_flexible_server fs {
   name = local.fs_name
 }
 
+data azurerm_postgresql_flexible_server fs_replica {
+  depends_on = [
+    azurerm_resource_group_template_deployment.fs_replica
+  ]
+  resource_group_name = azurerm_resource_group.rg.name
+  name = local.fs_replica_name
+}
+
 data azurerm_postgresql_flexible_server ec {
   depends_on = [
     azurerm_resource_group_template_deployment.elastic_cluster
@@ -21,10 +29,26 @@ data azurerm_postgresql_flexible_server ec {
   name = local.ec_name
 }
 
+data azurerm_postgresql_flexible_server ec_replica {
+  depends_on = [
+    azurerm_resource_group_template_deployment.ec_replica
+  ]
+  resource_group_name = azurerm_resource_group.rg.name
+  name = local.ec_replica_name
+}
+
 data "azurerm_monitor_diagnostic_categories" "fs" {
   resource_id = data.azurerm_postgresql_flexible_server.fs.id
 }
 
 data "azurerm_monitor_diagnostic_categories" ec {
   resource_id = data.azurerm_postgresql_flexible_server.ec.id
+}
+
+data "azurerm_monitor_diagnostic_categories" "fs_replica" {
+  resource_id = data.azurerm_postgresql_flexible_server.fs_replica
+}
+
+data "azurerm_monitor_diagnostic_categories" ec_replica {
+  resource_id = data.azurerm_postgresql_flexible_server.ec_replica.id
 }

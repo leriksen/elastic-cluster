@@ -73,7 +73,20 @@ resource "azurerm_resource_group_template_deployment" "fs_replica" {
 
 resource "azurerm_postgresql_flexible_server_active_directory_administrator" "fs_aad" {
   depends_on = [
-    azurerm_resource_group_template_deployment.elastic_cluster
+    azurerm_resource_group_template_deployment.flexible_server
+  ]
+
+  object_id           = data.azurerm_client_config.current.object_id
+  principal_name      = data.azuread_service_principal.self.display_name
+  principal_type      = "ServicePrincipal"
+  resource_group_name = azurerm_resource_group.rg.name
+  server_name         = local.fs_name
+  tenant_id           = data.azurerm_client_config.current.tenant_id
+}
+
+resource "azurerm_postgresql_flexible_server_active_directory_administrator" "fs_replica_aad" {
+  depends_on = [
+    azurerm_resource_group_template_deployment.fs_replica
   ]
 
   object_id           = data.azurerm_client_config.current.object_id
@@ -85,12 +98,16 @@ resource "azurerm_postgresql_flexible_server_active_directory_administrator" "fs
 }
 
 resource "azurerm_postgresql_flexible_server_configuration" "fs_config" {
-  timeouts {
-    delete = "5m"
-  }
   for_each  = module.global.server_configs
   name      = each.key
   server_id = data.azurerm_postgresql_flexible_server.fs.id
+  value     = each.value
+}
+
+resource "azurerm_postgresql_flexible_server_configuration" "fs_replica_config" {
+  for_each  = module.global.server_configs
+  name      = each.key
+  server_id = data.azurerm_postgresql_flexible_server.fs_replica.id
   value     = each.value
 }
 
@@ -101,6 +118,23 @@ resource "azurerm_monitor_diagnostic_setting" "fs" {
 
   dynamic "enabled_log" {
     for_each = data.azurerm_monitor_diagnostic_categories.fs.log_category_groups
+    content {
+      category_group = enabled_log.value
+    }
+  }
+
+  enabled_metric {
+    category = "AllMetrics"
+  }
+}
+
+resource "azurerm_monitor_diagnostic_setting" "fs_replica" {
+  name                       = "ds_fs"
+  target_resource_id         = data.azurerm_postgresql_flexible_server.fs_replica.id
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
+
+  dynamic "enabled_log" {
+    for_each = data.azurerm_monitor_diagnostic_categories.fs_replica.log_category_groups
     content {
       category_group = enabled_log.value
     }
