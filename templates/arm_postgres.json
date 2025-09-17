@@ -11,6 +11,10 @@
     "backup_retention_days": {
       "type": "String"
     },
+    "cluster_size": {
+      "type": "String",
+      "defaultValue": ""
+    },
     "cmk_assigned_identity": {
       "type": "String"
     },
@@ -65,6 +69,9 @@
     "storage_size_gb": {
       "type": "String"
     },
+    "storage_type": {
+      "type": "String"
+    },
     "tenant_id": {
       "type": "String"
     },
@@ -100,6 +107,7 @@
           "backupRetentionDays": "[parameters('backup_retention_days')]",
           "geoRedundantBackup" : "[parameters('geo_redundant_backup')]"
         },
+        "cluster": "[if(not(empty(parameters('cluster_size'))), create_object('clusterSize', parameters('cluster_size')), json('null'))]",
         "createMode": "[parameters('create_mode')]",
         "dataEncryption": {
           "type"                         : "[parameters('cmk_encryption_type')]",
@@ -117,7 +125,8 @@
         "sourceServerResourceId": "[if(not(empty(parameters('source_server_id'))), parameters('source_server_id'), json('null'))]",
         "storage": {
           "StorageSizeGB": "[parameters('storage_size_gb')]",
-          "Autogrow"     : "[parameters('storage_autogrow')]"
+          "Autogrow"     : "[parameters('storage_autogrow')]",
+          "type"         : "[parameters('storage_type')]"
         },
         "version": "[parameters('version')]"
       }

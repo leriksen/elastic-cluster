@@ -4,10 +4,10 @@ resource "azurerm_resource_group_template_deployment" "elastic_cluster" {
   ]
   deployment_mode     = "Incremental"
   name                = local.ec_name
-  template_content    = file("${path.module}/templates/arm_elastic_cluster.json")
+  template_content    = file("${path.module}/templates/arm_postgres.json")
   resource_group_name = azurerm_resource_group.rg.name
   parameters_content = templatefile(
-    "${path.module}/templates/parameters_elastic_cluster.json",
+    "${path.module}/templates/parameters_postgres.json",
     {
       active_directory_auth     = module.global.active_directory_auth
       availability_zone         = module.global.availability_zone
@@ -31,6 +31,7 @@ resource "azurerm_resource_group_template_deployment" "elastic_cluster" {
       standby_availability_zone = module.global.standby_availability_zone
       storage_autogrow          = module.global.storage_autogrow
       storage_size_gb           = module.global.storage_size_gb
+      storage_type              = module.global.storage_type
       tenant_id                 = data.azurerm_client_config.current.tenant_id
       version                   = module.global.pg_version
     }
@@ -40,14 +41,15 @@ resource "azurerm_resource_group_template_deployment" "elastic_cluster" {
 resource "azurerm_resource_group_template_deployment" "ec_replica" {
   deployment_mode     = "Incremental"
   name                = local.ec_replica_name
-  template_content    = file("${path.module}/templates/arm_elastic_cluster.json")
+  template_content    = file("${path.module}/templates/arm_postgres.json")
   resource_group_name = azurerm_resource_group.rg.name
   parameters_content = templatefile(
-    "${path.module}/templates/arm_elastic_cluster.json",
+    "${path.module}/templates/parameters_postgres.json",
     {
       active_directory_auth     = module.global.active_directory_auth
       availability_zone         = module.global.availability_zone
       backup_retention_days     = module.global.backup_retention_days
+      cluster_size              = module.global.cluster_size
       cmk_assigned_identity     = azurerm_user_assigned_identity.umi.id
       cmk_encryption_type       = module.global.encryption_type
       cmk_key_uri               = azurerm_key_vault_key.cmk.versionless_id
@@ -63,6 +65,7 @@ resource "azurerm_resource_group_template_deployment" "ec_replica" {
       source_server_id          = data.azurerm_postgresql_flexible_server.ec.id
       sku_name                  = module.global.ec_sku_name
       sku_tier                  = module.global.sku_tier
+      storage_type              = module.global.storage_type
       standby_availability_zone = module.global.standby_availability_zone
       storage_autogrow          = module.global.storage_autogrow
       storage_size_gb           = module.global.storage_size_gb
@@ -76,6 +79,7 @@ resource "azurerm_postgresql_flexible_server_active_directory_administrator" "ec
   depends_on = [
     azurerm_resource_group_template_deployment.elastic_cluster
   ]
+
   object_id           = data.azurerm_client_config.current.object_id
   principal_name      = data.azuread_service_principal.self.display_name
   principal_type      = "ServicePrincipal"
@@ -88,6 +92,7 @@ resource "azurerm_postgresql_flexible_server_active_directory_administrator" "ec
   depends_on = [
     azurerm_resource_group_template_deployment.ec_replica
   ]
+
   object_id           = data.azurerm_client_config.current.object_id
   principal_name      = data.azuread_service_principal.self.display_name
   principal_type      = "ServicePrincipal"

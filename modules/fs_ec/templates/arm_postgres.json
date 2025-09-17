@@ -11,6 +11,9 @@
     "backup_retention_days": {
       "type": "String"
     },
+    "cluster_size": {
+      "type": "String"
+    },
     "cmk_assigned_identity": {
       "type": "String"
     },
@@ -99,6 +102,9 @@
         "backup": {
           "backupRetentionDays": "[parameters('backup_retention_days')]",
           "geoRedundantBackup" : "[parameters('geo_redundant_backup')]"
+        },
+        "cluster": {
+          "clusterSize": "[parameters('cluster_size')]"
         },
         "createMode": "[parameters('create_mode')]",
         "dataEncryption": {

@@ -90,6 +90,10 @@ output "storage_autogrow_bool" {
   value = false
 }
 
+output "storage_type" {
+  value = "Premium_LRS"
+}
+
 output "server_configs" {
   value = {
     "require_secure_transport"              = "OFF"
