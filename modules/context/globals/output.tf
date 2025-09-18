@@ -70,30 +70,6 @@ output "public_network_access" {
   value = "Disabled"
 }
 
-output "standby_availability_zone" {
-  value = "2"
-}
-
-output "sku_name" {
-  value = "GP_Standard_D4ads_v5"
-}
-
-output "sku_tier" {
-  value = "GeneralPurpose"
-}
-
-output "storage_autogrow" {
-  value = "Disabled"
-}
-
-output "storage_autogrow_bool" {
-  value = false
-}
-
-output "storage_type" {
-  value = "Premium_LRS"
-}
-
 output "server_configs" {
   value = {
     "require_secure_transport"              = "OFF"
@@ -104,8 +80,40 @@ output "server_configs" {
   }
 }
 
+output "sku_name" {
+  value = "GP_Standard_D4ads_v5"
+}
+
+output "sku_tier" {
+  value = "GeneralPurpose"
+}
+
+output "standby_availability_zone" {
+  value = "2"
+}
+
+output "storage_autogrow" {
+  value = "Disabled"
+}
+
+output "storage_autogrow_bool" {
+  value = false
+}
+
+output "storage_iops" {
+  value = "3000"
+}
+
+output "storage_throughput" {
+  value = "125"
+}
+
+output "storage_type" {
+  value = "PremiumV2_LRS"
+}
+
 output "storage_size_gb" {
-  value = "32"
+  value = "128"
 }
 
 output "storage_size_mb" {

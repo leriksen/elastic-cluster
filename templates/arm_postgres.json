@@ -66,7 +66,13 @@
     "storage_autogrow": {
       "type": "String"
     },
+    "storage_iops": {
+      "type": "String"
+    },
     "storage_size_gb": {
+      "type": "String"
+    },
+    "storage_throughput": {
       "type": "String"
     },
     "storage_type": {
@@ -124,8 +130,10 @@
         "replicationRole":        "[parameters('replication_role')]",
         "sourceServerResourceId": "[if(empty(parameters('source_server_id')), json('null')  , parameters('source_server_id'))]",
         "storage": {
-          "StorageSizeGB": "[parameters('storage_size_gb')]",
-          "Autogrow"     : "[parameters('storage_autogrow')]",
+          "storageSizeGB": "[parameters('storage_size_gb')]",
+          "autoGrow"     : "[parameters('storage_autogrow')]",
+          "iops"         : "[if(empty(parameters('storage_iops')), json('null')  , parameters('storage_iops'))]",
+          "throughput"   : "[if(empty(parameters('storage_throughput')), json('null')  , parameters('storage_throughput'))]",
           "type"         : "[parameters('storage_type')]"
         },
         "version": "[parameters('version')]"

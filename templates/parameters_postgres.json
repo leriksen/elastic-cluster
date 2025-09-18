@@ -62,8 +62,14 @@
   "storage_autogrow": {
     "value": "${storage_autogrow}"
   },
+  "storage_iops": {
+    "value": "${storage_iops}"
+  },
   "storage_size_gb": {
     "value": "${storage_size_gb}"
+  },
+  "storage_throughput": {
+    "value": "${storage_throughput}"
   },
   "storage_type": {
     "value": "${storage_type}"

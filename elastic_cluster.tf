@@ -1,11 +1,8 @@
 resource "azurerm_resource_group_template_deployment" "elastic_cluster" {
-  depends_on = [
-    azurerm_role_assignment.cmk_user
-  ]
   deployment_mode     = "Incremental"
   name                = local.ec_name
   template_content    = file("${path.module}/templates/arm_postgres.json")
-  resource_group_name = azurerm_resource_group.rg.name
+  resource_group_name = data.azurerm_resource_group.rg.name
   parameters_content = templatefile(
     "${path.module}/templates/parameters_postgres.json",
     {
@@ -13,14 +10,14 @@ resource "azurerm_resource_group_template_deployment" "elastic_cluster" {
       availability_zone         = module.global.availability_zone
       backup_retention_days     = module.global.backup_retention_days
       cluster_size              = module.global.cluster_size
-      cmk_assigned_identity     = azurerm_user_assigned_identity.umi.id
+      cmk_assigned_identity     = data.azurerm_user_assigned_identity.umi.id
       cmk_encryption_type       = module.global.encryption_type
-      cmk_key_uri               = azurerm_key_vault_key.cmk.versionless_id
+      cmk_key_uri               = data.azurerm_key_vault_key.cmk.versionless_id
       create_mode               = "Default"
       geo_redundant_backup      = module.global.geo_redundant_backup
       ha_mode                   = module.global.ha_mode
       identity_type             = module.global.identity_type
-      location                  = azurerm_resource_group.rg.location
+      location                  = data.azurerm_resource_group.rg.location
       name                      = local.ec_name
       password_auth             = module.global.password_auth
       public_network_access     = module.global.public_network_access
@@ -30,7 +27,9 @@ resource "azurerm_resource_group_template_deployment" "elastic_cluster" {
       source_server_id          = ""
       standby_availability_zone = module.global.standby_availability_zone
       storage_autogrow          = module.global.storage_autogrow
+      storage_iops              = module.global.storage_iops
       storage_size_gb           = module.global.storage_size_gb
+      storage_throughput        = module.global.storage_throughput
       storage_type              = module.global.storage_type
       tenant_id                 = data.azurerm_client_config.current.tenant_id
       version                   = module.global.pg_version
@@ -46,7 +45,7 @@ resource "azurerm_postgresql_flexible_server_active_directory_administrator" "ec
   object_id           = data.azurerm_client_config.current.object_id
   principal_name      = data.azuread_service_principal.self.display_name
   principal_type      = "ServicePrincipal"
-  resource_group_name = azurerm_resource_group.rg.name
+  resource_group_name = data.azurerm_resource_group.rg.name
   server_name         = local.ec_name
   tenant_id           = data.azurerm_client_config.current.tenant_id
 }
@@ -61,7 +60,7 @@ resource "azurerm_postgresql_flexible_server_configuration" "ec_config" {
 resource "azurerm_monitor_diagnostic_setting" "ec" {
   name                       = "ds_ec"
   target_resource_id         = data.azurerm_postgresql_flexible_server.ec.id
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
+  log_analytics_workspace_id = data.azurerm_log_analytics_workspace.law.id
 
   dynamic "enabled_log" {
     for_each = data.azurerm_monitor_diagnostic_categories.ec.log_category_groups
