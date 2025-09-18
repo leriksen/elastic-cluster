@@ -107,8 +107,8 @@
           "backupRetentionDays": "[parameters('backup_retention_days')]",
           "geoRedundantBackup" : "[parameters('geo_redundant_backup')]"
         },
-        "cluster": "[if(not(empty(parameters('cluster_size'))), create_object('clusterSize', parameters('cluster_size')), json('null'))]",
-        "createMode": "[parameters('create_mode')]",
+        "cluster"       : "[if(empty(parameters('cluster_size')), json('null'), createObject('clusterSize', parameters('cluster_size')))]",
+        "createMode"    : "[parameters('create_mode')]",
         "dataEncryption": {
           "type"                         : "[parameters('cmk_encryption_type')]",
           "primaryKeyURI"                : "[parameters('cmk_key_uri')]",
@@ -122,7 +122,7 @@
           "publicNetworkAccess": "[parameters('public_network_access')]"
         },
         "replicationRole":        "[parameters('replication_role')]",
-        "sourceServerResourceId": "[if(not(empty(parameters('source_server_id'))), parameters('source_server_id'), json('null'))]",
+        "sourceServerResourceId": "[if(empty(parameters('source_server_id')), json('null')  , parameters('source_server_id'))]",
         "storage": {
           "StorageSizeGB": "[parameters('storage_size_gb')]",
           "Autogrow"     : "[parameters('storage_autogrow')]",
