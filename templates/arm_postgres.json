@@ -1,0 +1,135 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "active_directory_auth": {
+      "type": "String"
+    },
+    "availability_zone": {
+      "type": "String"
+    },
+    "backup_retention_days": {
+      "type": "String"
+    },
+    "cluster_size": {
+      "type": "String",
+      "defaultValue": ""
+    },
+    "cmk_assigned_identity": {
+      "type": "String"
+    },
+    "cmk_encryption_type": {
+      "type": "String"
+    },
+    "cmk_key_uri": {
+      "type": "String"
+    },
+    "create_mode": {
+      "type": "String"
+    },
+    "geo_redundant_backup": {
+      "type": "String"
+    },
+    "ha_mode": {
+      "type": "String"
+    },
+    "identity_type": {
+      "type": "String"
+    },
+    "location": {
+      "type": "String"
+    },
+    "name": {
+      "type": "String"
+    },
+    "password_auth": {
+      "type": "String"
+    },
+    "public_network_access": {
+      "type": "String"
+    },
+    "replication_role": {
+      "type": "String"
+    },
+    "sku_name": {
+      "type": "String"
+    },
+    "sku_tier": {
+      "type": "String"
+    },
+    "source_server_id": {
+      "type": "String"
+    },
+    "standby_availability_zone": {
+      "type": "String"
+    },
+    "storage_autogrow": {
+      "type": "String"
+    },
+    "storage_size_gb": {
+      "type": "String"
+    },
+    "storage_type": {
+      "type": "String"
+    },
+    "tenant_id": {
+      "type": "String"
+    },
+    "version": {
+      "type": "String"
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "type"      : "Microsoft.DBforPostgreSQL/flexibleServers",
+      "apiVersion": "2025-01-01-preview",
+      "name"      : "[parameters('name')]",
+      "location"  : "[parameters('location')]",
+      "sku": {
+        "name": "[parameters('sku_name')]",
+        "tier": "[parameters('sku_tier')]"
+      },
+      "identity": {
+        "type": "[parameters('identity_type')]",
+        "userAssignedIdentities": {
+          "[parameters('cmk_assigned_identity')]": {}
+        }
+      },
+      "properties": {
+        "authConfig": {
+          "activeDirectoryAuth": "[parameters('active_directory_auth')]",
+          "passwordAuth"       : "[parameters('password_auth')]",
+          "tenantId"           : "[parameters('tenant_id')]"
+        },
+        "availabilityZone": "[parameters('availability_zone')]",
+        "backup": {
+          "backupRetentionDays": "[parameters('backup_retention_days')]",
+          "geoRedundantBackup" : "[parameters('geo_redundant_backup')]"
+        },
+        "cluster": "[if(not(empty(parameters('cluster_size'))), create_object('clusterSize', parameters('cluster_size')), json('null'))]",
+        "createMode": "[parameters('create_mode')]",
+        "dataEncryption": {
+          "type"                         : "[parameters('cmk_encryption_type')]",
+          "primaryKeyURI"                : "[parameters('cmk_key_uri')]",
+          "primaryUserAssignedIdentityId": "[parameters('cmk_assigned_identity')]"
+        },
+        "highAvailability": {
+          "mode"                   : "[parameters('ha_mode')]",
+          "standbyAvailabilityZone": "[parameters('standby_availability_zone')]"
+        },
+        "network": {
+          "publicNetworkAccess": "[parameters('public_network_access')]"
+        },
+        "replicationRole":        "[parameters('replication_role')]",
+        "sourceServerResourceId": "[if(not(empty(parameters('source_server_id'))), parameters('source_server_id'), json('null'))]",
+        "storage": {
+          "StorageSizeGB": "[parameters('storage_size_gb')]",
+          "Autogrow"     : "[parameters('storage_autogrow')]",
+          "type"         : "[parameters('storage_type')]"
+        },
+        "version": "[parameters('version')]"
+      }
+    }
+  ]
+}
