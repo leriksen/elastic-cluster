@@ -1,4 +1,4 @@
-resource "azurerm_resource_group_template_deployment" "elastic_cluster" {
+resource azurerm_resource_group_template_deployment elastic_cluster {
   deployment_mode     = "Incremental"
   name                = local.ec_name
   template_content    = file("${path.module}/templates/arm_postgres.json")
@@ -37,7 +37,7 @@ resource "azurerm_resource_group_template_deployment" "elastic_cluster" {
   )
 }
 
-resource "azurerm_postgresql_flexible_server_active_directory_administrator" "ec_aad" {
+resource azurerm_postgresql_flexible_server_active_directory_administrator ec_aad {
   depends_on = [
     azurerm_resource_group_template_deployment.elastic_cluster
   ]
@@ -50,14 +50,14 @@ resource "azurerm_postgresql_flexible_server_active_directory_administrator" "ec
   tenant_id           = data.azurerm_client_config.current.tenant_id
 }
 
-resource "azurerm_postgresql_flexible_server_configuration" "ec_config" {
+resource azurerm_postgresql_flexible_server_configuration ec_config {
   for_each  = module.global.server_configs
   name      = each.key
   server_id = data.azurerm_postgresql_flexible_server.ec.id
   value     = each.value
 }
 
-resource "azurerm_monitor_diagnostic_setting" "ec" {
+resource azurerm_monitor_diagnostic_setting ec {
   name                       = "ds_ec"
   target_resource_id         = data.azurerm_postgresql_flexible_server.ec.id
   log_analytics_workspace_id = data.azurerm_log_analytics_workspace.law.id
@@ -72,4 +72,45 @@ resource "azurerm_monitor_diagnostic_setting" "ec" {
   enabled_metric {
     category = "AllMetrics"
   }
+}
+
+resource azurerm_role_assignment backup_role_ec {
+  principal_id         = data.azurerm_data_protection_backup_vault.bv.identity[0].principal_id
+  role_definition_name = "PostgreSQL Flexible Server Long Term Retention Backup Role"
+  scope                = data.azurerm_postgresql_flexible_server.ec.id
+
+}
+
+resource azurerm_role_assignment reader_role {
+  principal_id         = data.azurerm_data_protection_backup_vault.bv.identity[0].principal_id
+  role_definition_name = "Reader"
+  scope                = data.azurerm_resource_group.rg.id
+}
+
+resource azurerm_data_protection_backup_policy_postgresql_flexible_server postgresql_backup_policy {
+  name     = "postgresql-backup-policy"
+  vault_id = data.azurerm_data_protection_backup_vault.bv.id
+  backup_repeating_time_intervals = [
+    "R/2025-09-19T05:30:00+10:00/P1W"
+  ]
+  time_zone = module.global.timezone
+
+  default_retention_rule {
+    life_cycle {
+      duration        = "P4M"
+      data_store_type = "VaultStore"
+    }
+  }
+}
+
+resource azurerm_data_protection_backup_instance_postgresql_flexible_server postgresql_backup_instance_ec {
+  name             = format("backup-%s", data.azurerm_postgresql_flexible_server.ec.name)
+  location         = data.azurerm_resource_group.rg.location
+  vault_id         = data.azurerm_data_protection_backup_vault.bv.id
+  server_id        = data.azurerm_postgresql_flexible_server.ec.id
+  backup_policy_id = azurerm_data_protection_backup_policy_postgresql_flexible_server.postgresql_backup_policy.id
+
+  depends_on = [
+    azurerm_role_assignment.reader_role
+  ]
 }

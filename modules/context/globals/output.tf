@@ -101,15 +101,15 @@ output "storage_autogrow_bool" {
 }
 
 output "storage_iops" {
-  value = "3000"
+  value = ""
 }
 
 output "storage_throughput" {
-  value = "125"
+  value = ""
 }
 
 output "storage_type" {
-  value = "PremiumV2_LRS"
+  value = "Premium_LRS"
 }
 
 output "storage_size_gb" {
@@ -118,4 +118,8 @@ output "storage_size_gb" {
 
 output "storage_size_mb" {
   value = "32768"
+}
+
+output "timezone" {
+  value = "AUS Eastern Standard Time"
 }
