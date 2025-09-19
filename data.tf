@@ -44,12 +44,6 @@ data azurerm_private_dns_zone psql {
   resource_group_name = data.azurerm_resource_group.rg.name
 }
 
-data azurerm_network_interface nic01 {
-  name                = "nic01"
-  resource_group_name = data.azurerm_resource_group.rg.name
-}
-
-
 data azurerm_postgresql_flexible_server ec {
   depends_on = [
     azurerm_resource_group_template_deployment.elastic_cluster
