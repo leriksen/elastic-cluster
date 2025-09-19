@@ -35,3 +35,23 @@
 #     private_dns_zone_ids = [data.azurerm_private_dns_zone.psql.id]
 #   }
 # }
+
+resource "azurerm_public_ip" "ip01" {
+  location            = data.azurerm_resource_group.rg.location
+  name                = "ip01"
+  resource_group_name = data.azurerm_resource_group.rg.name
+  allocation_method   = "Static"
+}
+
+resource "azurerm_network_interface" "nic01" {
+  name                = "nic01"
+  location            = data.azurerm_resource_group.rg.location
+  resource_group_name = data.azurerm_resource_group.rg.name
+
+  ip_configuration {
+    name                          = "public"
+    private_ip_address_allocation = "Dynamic"
+    subnet_id                     = data.azurerm_subnet.pe01.id
+    public_ip_address_id          = azurerm_public_ip.ip01.id
+  }
+}
