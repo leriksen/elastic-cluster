@@ -49,21 +49,6 @@ data azurerm_network_interface nic01 {
   resource_group_name = data.azurerm_resource_group.rg.name
 }
 
-data azurerm_postgresql_flexible_server fs {
-  depends_on = [
-    azurerm_resource_group_template_deployment.flexible_server
-  ]
-  resource_group_name = data.azurerm_resource_group.rg.name
-  name = local.fs_name
-}
-
-data azurerm_postgresql_flexible_server fs_replica {
-  depends_on = [
-    azurerm_resource_group_template_deployment.fs_replica
-  ]
-  resource_group_name = data.azurerm_resource_group.rg.name
-  name = local.fs_replica_name
-}
 
 data azurerm_postgresql_flexible_server ec {
   depends_on = [
@@ -71,14 +56,6 @@ data azurerm_postgresql_flexible_server ec {
   ]
   resource_group_name = data.azurerm_resource_group.rg.name
   name                = local.ec_name
-}
-
-data "azurerm_monitor_diagnostic_categories" "fs" {
-  resource_id = data.azurerm_postgresql_flexible_server.fs.id
-}
-
-data "azurerm_monitor_diagnostic_categories" "fs_replica" {
-  resource_id = data.azurerm_postgresql_flexible_server.fs_replica.id
 }
 
 data "azurerm_monitor_diagnostic_categories" ec {

@@ -1,5 +1,5 @@
 resource "azurerm_linux_virtual_machine" "vm01" {
-  name                = "vm01"
+  name                = "vm02"
   resource_group_name = data.azurerm_resource_group.rg.name
   location            = data.azurerm_resource_group.rg.location
   size                = "Standard_F2"

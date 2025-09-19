@@ -81,14 +81,8 @@ resource azurerm_role_assignment backup_role_ec {
 
 }
 
-resource azurerm_role_assignment reader_role {
-  principal_id         = data.azurerm_data_protection_backup_vault.bv.identity[0].principal_id
-  role_definition_name = "Reader"
-  scope                = data.azurerm_resource_group.rg.id
-}
-
 resource azurerm_data_protection_backup_policy_postgresql_flexible_server postgresql_backup_policy {
-  name     = "postgresql-backup-policy"
+  name     = "postgresql-backup-policy-ec"
   vault_id = data.azurerm_data_protection_backup_vault.bv.id
   backup_repeating_time_intervals = [
     "R/2025-09-19T05:30:00+10:00/P1W"
@@ -111,6 +105,6 @@ resource azurerm_data_protection_backup_instance_postgresql_flexible_server post
   backup_policy_id = azurerm_data_protection_backup_policy_postgresql_flexible_server.postgresql_backup_policy.id
 
   depends_on = [
-    azurerm_role_assignment.reader_role
+    azurerm_role_assignment.backup_role_ec
   ]
 }
