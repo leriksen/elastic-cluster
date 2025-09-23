@@ -1,4 +1,4 @@
-resource "azurerm_linux_virtual_machine" "vm01" {
+resource "azurerm_linux_virtual_machine" "vm02" {
   name                = "vm02"
   resource_group_name = data.azurerm_resource_group.rg.name
   location            = data.azurerm_resource_group.rg.location
@@ -11,6 +11,10 @@ resource "azurerm_linux_virtual_machine" "vm01" {
   admin_ssh_key {
     username   = "adminuser"
     public_key = file("~/.ssh/id_rsa.pub")
+  }
+
+  identity {
+    type = "SystemAssigned"
   }
 
   os_disk {

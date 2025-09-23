@@ -50,6 +50,19 @@ resource azurerm_postgresql_flexible_server_active_directory_administrator ec_aa
   tenant_id           = data.azurerm_client_config.current.tenant_id
 }
 
+resource azurerm_postgresql_flexible_server_active_directory_administrator vm_aad {
+  depends_on = [
+    azurerm_resource_group_template_deployment.elastic_cluster
+  ]
+
+  object_id           = azurerm_linux_virtual_machine.vm02.identity[0].principal_id
+  principal_name      = azurerm_linux_virtual_machine.vm02.name
+  principal_type      = "ServicePrincipal"
+  resource_group_name = data.azurerm_resource_group.rg.name
+  server_name         = local.ec_name
+  tenant_id           = data.azurerm_client_config.current.tenant_id
+}
+
 resource azurerm_postgresql_flexible_server_configuration ec_config {
   for_each  = module.global.server_configs
   name      = each.key
