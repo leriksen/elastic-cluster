@@ -12,7 +12,7 @@ resource azurerm_resource_group_template_deployment elastic_cluster {
       cluster_size              = module.global.cluster_size
       cmk_assigned_identity     = data.azurerm_user_assigned_identity.umi.id
       cmk_encryption_type       = module.global.encryption_type
-      cmk_key_uri               = data.azurerm_key_vault_key.cmk.versionless_id
+      cmk_key_uri               = data.azurerm_key_vault_key.cmk.id
       create_mode               = "Default"
       geo_redundant_backup      = module.global.geo_redundant_backup
       ha_mode                   = module.global.ha_mode
@@ -110,14 +110,14 @@ resource azurerm_data_protection_backup_policy_postgresql_flexible_server postgr
   }
 }
 
-resource azurerm_data_protection_backup_instance_postgresql_flexible_server postgresql_backup_instance_ec {
-  name             = format("backup-%s", data.azurerm_postgresql_flexible_server.ec.name)
-  location         = data.azurerm_resource_group.rg.location
-  vault_id         = data.azurerm_data_protection_backup_vault.bv.id
-  server_id        = data.azurerm_postgresql_flexible_server.ec.id
-  backup_policy_id = azurerm_data_protection_backup_policy_postgresql_flexible_server.postgresql_backup_policy.id
-
-  depends_on = [
-    azurerm_role_assignment.backup_role_ec
-  ]
-}
+# resource azurerm_data_protection_backup_instance_postgresql_flexible_server postgresql_backup_instance_ec {
+#   name             = format("backup-%s", data.azurerm_postgresql_flexible_server.ec.name)
+#   location         = data.azurerm_resource_group.rg.location
+#   vault_id         = data.azurerm_data_protection_backup_vault.bv.id
+#   server_id        = data.azurerm_postgresql_flexible_server.ec.id
+#   backup_policy_id = azurerm_data_protection_backup_policy_postgresql_flexible_server.postgresql_backup_policy.id
+#
+#   depends_on = [
+#     azurerm_role_assignment.backup_role_ec
+#   ]
+# }
