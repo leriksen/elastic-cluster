@@ -22,6 +22,10 @@ output "cluster_size" {
   value = "2"
 }
 
+output "day_of_week" {
+  value = "1"
+}
+
 output "ec_sku_name" {
   value = "Standard_D4ads_v5"
 }
@@ -72,11 +76,11 @@ output "public_network_access" {
 
 output "server_configs" {
   value = {
-    "pg_qs.query_capture_mode"              = "ALL"
-    "pgms_wait_sampling.query_capture_mode" = "ALL"
-    "track_io_timing"                       = "ON"
-    "pgbouncer.enabled"                     = "true"
-    "azure.extensions"                      = "VECTOR"
+    # "pg_qs.query_capture_mode"              = "ALL"
+    # "pgms_wait_sampling.query_capture_mode" = "ALL"
+    # "track_io_timing"                       = "ON"
+    # "pgbouncer.enabled"                     = "true"
+    # "azure.extensions"                      = "VECTOR"
   }
 }
 
@@ -90,6 +94,14 @@ output "sku_tier" {
 
 output "standby_availability_zone" {
   value = "2"
+}
+
+output "start_hour" {
+  value = "1"
+}
+
+output "start_minute" {
+  value = "30"
 }
 
 output "storage_autogrow" {

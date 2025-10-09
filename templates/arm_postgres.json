@@ -27,6 +27,9 @@
     "create_mode": {
       "type": "String"
     },
+    "day_of_week": {
+      "type": "String"
+    },
     "geo_redundant_backup": {
       "type": "String"
     },
@@ -61,6 +64,12 @@
       "type": "String"
     },
     "standby_availability_zone": {
+      "type": "String"
+    },
+    "start_hour": {
+      "type": "String"
+    },
+    "start_minute": {
       "type": "String"
     },
     "storage_autogrow": {
@@ -124,6 +133,12 @@
           "mode"                   : "[parameters('ha_mode')]",
           "standbyAvailabilityZone": "[parameters('standby_availability_zone')]"
         },
+        "maintenanceWindow": {
+          "customWindow": "Disabled",
+          "dayOfWeek":    "[int(parameters('day_of_week' ))]",
+          "startHour":    "[int(parameters('start_hour'  ))]",
+          "startMinute":  "[int(parameters('start_minute'))]"
+        },
         "network": {
           "publicNetworkAccess": "[parameters('public_network_access')]"
         },
@@ -139,5 +154,11 @@
         "version": "[parameters('version')]"
       }
     }
-  ]
+  ],
+  "outputs": {
+    "highAvailability": {
+      "type": "object",
+      "value": "[reference(resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('name'))).highAvailability]"
+    }
+  }
 }

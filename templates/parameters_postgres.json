@@ -23,6 +23,9 @@
   "create_mode": {
     "value": "${create_mode}"
   },
+  "day_of_week": {
+    "value": "${day_of_week}"
+  },
   "geo_redundant_backup": {
     "value": "${geo_redundant_backup}"
   },
@@ -58,6 +61,12 @@
   },
   "standby_availability_zone": {
     "value": "${standby_availability_zone}"
+  },
+  "start_hour": {
+    "value": "${start_hour}"
+  },
+  "start_minute": {
+    "value": "${start_minute}"
   },
   "storage_autogrow": {
     "value": "${storage_autogrow}"
