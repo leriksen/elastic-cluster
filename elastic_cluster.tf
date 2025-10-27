@@ -4,7 +4,7 @@ resource azurerm_resource_group_template_deployment elastic_cluster {
   template_content    = file("${path.module}/templates/arm_postgres.json")
   resource_group_name = data.azurerm_resource_group.rg.name
   parameters_content = templatefile(
-    "${path.module}/templates/parameters_postgres.json",
+    "${path.module}/templates/parameters_postgres.json.tpl",
     {
       active_directory_auth     = module.global.active_directory_auth
       availability_zone         = module.global.availability_zone

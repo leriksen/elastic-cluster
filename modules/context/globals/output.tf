@@ -19,7 +19,7 @@ output "backup_retention_days" {
 }
 
 output "cluster_size" {
-  value = "2"
+  value = 2
 }
 
 output "day_of_week" {

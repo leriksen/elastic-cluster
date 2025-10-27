@@ -9,7 +9,7 @@
     "value": "${backup_retention_days}"
   },
   "cluster_size": {
-    "value": "${cluster_size}"
+    "value": ${cluster_size}
   },
   "cmk_assigned_identity": {
     "value": "${cmk_assigned_identity}"
