@@ -27,7 +27,7 @@ output "day_of_week" {
 }
 
 output "ec_sku_name" {
-  value = "Standard_D4ads_v5"
+  value = "Standard_D2ads_v5"
 }
 
 output "encryption_type" {
@@ -59,33 +59,38 @@ output "location" {
 }
 
 output "password_auth" {
-  value = "Disabled"
-}
-
-output "password_auth_bool" {
-  value = false
+  value = "Enabled"
 }
 
 output "pg_version" {
-  value = "16"
+  value = "17"
 }
 
 output "public_network_access" {
-  value = "Disabled"
+  value = "Enabled"
 }
 
 output "server_configs" {
   value = {
-    # "pg_qs.query_capture_mode"              = "ALL"
-    # "pgms_wait_sampling.query_capture_mode" = "ALL"
-    # "track_io_timing"                       = "ON"
-    # "pgbouncer.enabled"                     = "true"
-    # "azure.extensions"                      = "VECTOR"
+    # note the casing is chosen to reduce TF flip/flops
+    "require_secure_transport"   = "OFF" # turn on SSL later once we get certs sorted
+    "log_line_prefix"            = "t=%m u=%u db=%d pid=[%p]" # audit log line format
+    "log_statement"              = "none" # dont use normal pg logging
+    "pgaudit.log"                = "ALL" # READ is not recommended
+    "pgaudit.log_catalog"        = "on" # following a MS PG recommendations
+    "pgaudit.log_level"          = "INFO"
+    "pgaudit.log_client"         = "ON"
+    "pgaudit.Log_parameter"      = "off"
+    "pgaudit.Log_relation"       = "off"
+    "pgaudit.Log_statement"      = "on"
+    "pgaudit.log_statement_once" = "off"
+    "azure.extensions"           = "PGAUDIT"
+    "shared_preload_libraries"   = "pgaudit" # needs to be lc, so tf doesnt flip/flop
   }
 }
 
 output "sku_name" {
-  value = "GP_Standard_D4ads_v5"
+  value = "GP_Standard_D2ads_v5"
 }
 
 output "sku_tier" {
@@ -108,10 +113,9 @@ output "storage_autogrow" {
   value = "Disabled"
 }
 
-output "storage_autogrow_bool" {
-  value = false
+output "storage_tier" {
+  value = "P10"
 }
-
 output "storage_iops" {
   value = ""
 }
@@ -122,10 +126,6 @@ output "storage_throughput" {
 
 output "storage_type" {
   value = "Premium_LRS"
-}
-
-output "storage_size_gb" {
-  value = "128"
 }
 
 output "storage_size_mb" {

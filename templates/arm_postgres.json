@@ -5,6 +5,12 @@
     "active_directory_auth": {
       "type": "String"
     },
+    "administrator_login": {
+      "type": "String"
+    },
+    "administrator_login_password": {
+      "type": "String"
+    },
     "availability_zone": {
       "type": "String"
     },
@@ -81,6 +87,9 @@
     "storage_size_gb": {
       "type": "String"
     },
+    "storage_tier": {
+      "type": "String"
+    },
     "storage_throughput": {
       "type": "String"
     },
@@ -112,45 +121,24 @@
         }
       },
       "properties": {
+        "administratorLogin": "[parameters('administrator_login')]",
+        "administratorLoginPassword": "[parameters('administrator_login_password')]",
         "authConfig": {
           "activeDirectoryAuth": "[parameters('active_directory_auth')]",
           "passwordAuth"       : "[parameters('password_auth')]",
           "tenantId"           : "[parameters('tenant_id')]"
         },
         "availabilityZone": "[parameters('availability_zone')]",
-        "backup": {
-          "backupRetentionDays": "[parameters('backup_retention_days')]",
-          "geoRedundantBackup" : "[parameters('geo_redundant_backup')]"
-        },
         "cluster"       : {
           "clusterSize": "[parameters('cluster_size')]"
         },
         "createMode"    : "[parameters('create_mode')]",
-        "dataEncryption": {
-          "type"                         : "[parameters('cmk_encryption_type')]",
-          "primaryKeyURI"                : "[parameters('cmk_key_uri')]",
-          "primaryUserAssignedIdentityId": "[parameters('cmk_assigned_identity')]"
-        },
-        "highAvailability": {
-          "mode"                   : "[parameters('ha_mode')]",
-          "standbyAvailabilityZone": "[parameters('standby_availability_zone')]"
-        },
-        "maintenanceWindow": {
-          "customWindow": "Disabled",
-          "dayOfWeek":    "[int(parameters('day_of_week' ))]",
-          "startHour":    "[int(parameters('start_hour'  ))]",
-          "startMinute":  "[int(parameters('start_minute'))]"
-        },
         "network": {
           "publicNetworkAccess": "[parameters('public_network_access')]"
         },
-        "replicationRole":        "[parameters('replication_role')]",
-        "sourceServerResourceId": "[if(empty(parameters('source_server_id')), json('null')  , parameters('source_server_id'))]",
         "storage": {
           "storageSizeGB": "[parameters('storage_size_gb')]",
-          "autoGrow"     : "[parameters('storage_autogrow')]",
-          "iops"         : "[if(empty(parameters('storage_iops')), json('null')  , parameters('storage_iops'))]",
-          "throughput"   : "[if(empty(parameters('storage_throughput')), json('null')  , parameters('storage_throughput'))]",
+          "tier"         : "[parameters('storage_tier')]",
           "type"         : "[parameters('storage_type')]"
         },
         "version": "[parameters('version')]"
@@ -159,8 +147,8 @@
   ],
   "outputs": {
     "highAvailability": {
-      "type": "object",
-      "value": "[reference(resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('name'))).highAvailability]"
+      "type": "Object",
+       "value": "[reference(resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('name')), '2025-01-01-preview', 'Full').properties.highAvailability]"
     }
   }
 }

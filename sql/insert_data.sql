@@ -1,6 +1,6 @@
 INSERT INTO students (name, teacher, year)
-VALUES
-  ('Simon', 'Mr Brown', 10),
-  ('Teresa', 'Mr Anderson', 11),
-  ('Jackie', 'Mr Brown', 12),
-  ('Wilson', 'Mrs Taylor', 11);
+SELECT
+    'Student ' || gs       AS name,
+    'Teacher ' || (gs % 10 + 1) AS teacher,
+    2000 + (gs % 5)        AS year
+FROM generate_series(1, 10000) AS gs;

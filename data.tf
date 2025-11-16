@@ -49,7 +49,7 @@ data azurerm_postgresql_flexible_server ec {
     azurerm_resource_group_template_deployment.elastic_cluster
   ]
   resource_group_name = data.azurerm_resource_group.rg.name
-  name                = local.ec_name
+  name                = local.psql_name
 }
 
 data "azurerm_monitor_diagnostic_categories" ec {

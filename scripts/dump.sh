@@ -1,1 +1,1 @@
-pg_dump -d postgres -Fc --table=postgres -f here.dump -T "cron.*"
+pg_dump -d postgres -Fc -f here.dump -T "cron.*"
